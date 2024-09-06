@@ -39,7 +39,7 @@ export function useTamagochiDatabase() {
         data.hunger,
         data.sleep,
         data.fun,
-        data.image,
+        data.image, // Ensure this is a key, not a URI
       ]);
 
       return { insertedRowId: result.lastInsertRowId };

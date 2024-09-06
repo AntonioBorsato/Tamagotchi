@@ -8,7 +8,7 @@ export type TamagochiProps = {
     hunger: number;
     sleep: number;
     fun: number;
-    image: string; // The image uri string saved in the database
+    image: string; // Chave da imagem
   };
   onPress: () => Promise<void>;
   onDelete: () => Promise<void>;
@@ -28,12 +28,12 @@ export const Tamagochi: React.FC<TamagochiProps> = ({
   onDelete,
   onOpen,
 }) => {
-  // Find the matching image from the IMAGES object based on the saved uri
-  const selectedImage = Object.values(IMAGES).find((img) => img === data.image);
+  // Acessa diretamente a imagem com a chave
+  const selectedImage = IMAGES[data.image as keyof typeof IMAGES];
 
   return (
     <View style={styles.container}>
-      {/* Display the selected image */}
+      {/* Exibe a imagem selecionada */}
       <Image source={selectedImage || IMAGES.eevee} style={styles.image} />
       <View style={styles.infoContainer}>
         <Text style={styles.name}>{data.name}</Text>
@@ -117,8 +117,5 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     backgroundColor: "#f44336",
-  },
-  openButton: {
-    backgroundColor: "#2196F3",
   },
 });

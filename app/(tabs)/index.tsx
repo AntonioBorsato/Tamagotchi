@@ -17,12 +17,13 @@ import {
   TamagochiDatabase,
 } from "@/db/useTamagochiDatabase";
 
-const IMAGES = [
-  { uri: require("@/assets/images/eevee.png") },
-  { uri: require("@/assets/images/piplup.png") },
-  { uri: require("@/assets/images/ponyta.jpg") },
-  { uri: require("@/assets/images/jigglypuff.png") },
-];
+// Definindo IMAGES como um objeto de strings para os URIs das imagens
+const IMAGES: Record<string, any> = {
+  eevee: require("@/assets/images/eevee.png"),
+  piplup: require("@/assets/images/piplup.png"),
+  ponyta: require("@/assets/images/ponyta.jpg"),
+  jigglypuff: require("@/assets/images/jigglypuff.png"),
+};
 
 export default function Index() {
   const [id, setId] = useState<string | null>(null);
@@ -30,7 +31,7 @@ export default function Index() {
   const [hunger, setHunger] = useState<number>(100);
   const [sleep, setSleep] = useState<number>(100);
   const [fun, setFun] = useState<number>(100);
-  const [image, setImage] = useState<string>(IMAGES[0].uri);
+  const [image, setImage] = useState<string>("eevee"); // Default to 'eevee'
   const [search, setSearch] = useState<string>("");
   const [tamagochis, setTamagochis] = useState<TamagochiDatabase[]>([]);
   const [availableIds, setAvailableIds] = useState<number[]>([]); // Lista de IDs disponíveis
@@ -132,8 +133,8 @@ export default function Index() {
     }
   }
 
-  function handleImageSelect(imageUri: string) {
-    setImage(imageUri);
+  function handleImageSelect(imageKey: string) {
+    setImage(imageKey);
   }
 
   async function handleSave() {
@@ -153,7 +154,7 @@ export default function Index() {
     setHunger(100);
     setSleep(100);
     setFun(100);
-    setImage(IMAGES[0].uri); // Reset para a imagem padrão
+    setImage("eevee"); // Reset to default image key
     await list();
   }
 
@@ -172,17 +173,14 @@ export default function Index() {
         />
 
         <View style={styles.imageContainer}>
-          {IMAGES.map((img, index) => (
+          {Object.keys(IMAGES).map((key, index) => (
             <TouchableOpacity
               key={index}
-              onPress={() => handleImageSelect(img.uri)}
+              onPress={() => handleImageSelect(key)}
             >
               <Image
-                source={img.uri}
-                style={[
-                  styles.image,
-                  image === img.uri && styles.selectedImage,
-                ]}
+                source={IMAGES[key]}
+                style={[styles.image, image === key && styles.selectedImage]}
               />
             </TouchableOpacity>
           ))}

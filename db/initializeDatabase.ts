@@ -17,7 +17,7 @@ export async function initializeDatabase(database: SQLiteDatabase) {
         hunger INTEGER NOT NULL DEFAULT 100, 
         sleep INTEGER NOT NULL DEFAULT 100,   
         fun INTEGER NOT NULL DEFAULT 100,     
-        image TEXT NOT NULL DEFAULT 'default_image_uri'
+        image TEXT NOT NULL DEFAULT 'eevee'
       );
     `);
 
