@@ -12,6 +12,22 @@ export type TamagochiDatabase = {
 export function useTamagochiDatabase() {
   const database = useSQLiteContext();
 
+  // Função para buscar IDs disponíveis para reutilização
+  async function getAvailableIds(): Promise<number[]> {
+    try {
+      const query = `
+        SELECT id + 1 AS next_id FROM tamagochis t
+        WHERE NOT EXISTS (SELECT 1 FROM tamagochis WHERE id = t.id + 1)
+        AND t.id < (SELECT MAX(id) FROM tamagochis)
+      `;
+      const response = await database.getAllAsync<{ next_id: number }>(query);
+      return response.map((row) => row.next_id);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  // Função modificada para criar um Tamagochi sem ID
   async function create(data: Omit<TamagochiDatabase, "id">) {
     const statement = await database.prepareAsync(`
       INSERT INTO tamagochis (name, hunger, sleep, fun, image) VALUES (?, ?, ?, ?, ?)
@@ -80,7 +96,9 @@ export function useTamagochiDatabase() {
   async function show(id: number) {
     try {
       const query = "SELECT * FROM tamagochis WHERE id = ?";
-      const response = await database.getFirstAsync<TamagochiDatabase>(query, [id]);
+      const response = await database.getFirstAsync<TamagochiDatabase>(query, [
+        id,
+      ]);
 
       return response;
     } catch (error) {
@@ -90,12 +108,10 @@ export function useTamagochiDatabase() {
 
   async function updateAttributesPeriodically() {
     try {
-      const now = Date.now();
-      const thirtyMinutes = 30 * 60 * 1000; // 30 minutos em milissegundos
-
-      // Seleciona todos os Tamagochis que foram atualizados há mais de 30 minutos
       const query = "SELECT id, hunger, sleep, fun FROM tamagochis";
-      const tamagochisToUpdate = await database.getAllAsync<TamagochiDatabase>(query);
+      const tamagochisToUpdate = await database.getAllAsync<TamagochiDatabase>(
+        query
+      );
 
       for (const tamagochi of tamagochisToUpdate) {
         const updatedHunger = Math.max(0, tamagochi.hunger - 1);
@@ -117,5 +133,13 @@ export function useTamagochiDatabase() {
     }
   }
 
-  return { create, searchByName, update, remove, show, updateAttributesPeriodically };
+  return {
+    create,
+    searchByName,
+    update,
+    remove,
+    show,
+    updateAttributesPeriodically,
+    getAvailableIds,
+  };
 }

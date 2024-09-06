@@ -21,7 +21,7 @@ export function Input({ placeholder, onChangeText, value }: InputProps) {
 const styles = StyleSheet.create({
   input: {
     height: 40,
-    borderColor: 'gray',
+    borderColor: "gray",
     borderWidth: 1,
     marginBottom: 10,
     padding: 10,

@@ -1,15 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { View, Button, FlatList, Alert, TouchableOpacity, Image, StyleSheet, Text } from "react-native";
+import {
+  View,
+  Button,
+  FlatList,
+  Alert,
+  TouchableOpacity,
+  Image,
+  StyleSheet,
+  Text,
+} from "react-native";
 import { router } from "expo-router";
 import { Input } from "@/components/input";
 import { Tamagochi } from "@/components/Tamagochi";
-import { useTamagochiDatabase, TamagochiDatabase } from "@/db/useTamagochiDatabase";
+import {
+  useTamagochiDatabase,
+  TamagochiDatabase,
+} from "@/db/useTamagochiDatabase";
 
 const IMAGES = [
-  { uri: require('@/assets/images/eevee.png') },
-  { uri: require('@/assets/images/piplup.png') },
-  { uri: require('@/assets/images/ponyta.jpg') },
-  { uri: require('@/assets/images/jigglypuff.png') },
+  { uri: require("@/assets/images/eevee.png") },
+  { uri: require("@/assets/images/piplup.png") },
+  { uri: require("@/assets/images/ponyta.jpg") },
+  { uri: require("@/assets/images/jigglypuff.png") },
 ];
 
 export default function Index() {
@@ -21,11 +33,22 @@ export default function Index() {
   const [image, setImage] = useState<string>(IMAGES[0].uri);
   const [search, setSearch] = useState<string>("");
   const [tamagochis, setTamagochis] = useState<TamagochiDatabase[]>([]);
-  
+  const [availableIds, setAvailableIds] = useState<number[]>([]); // Lista de IDs disponíveis
+
   const tamagochiDatabase = useTamagochiDatabase();
 
   async function create() {
     try {
+      let newId: number;
+      if (availableIds.length > 0) {
+        newId = availableIds[0];
+        setAvailableIds(availableIds.slice(1));
+      } else {
+        const lastTamagochi = tamagochis[tamagochis.length - 1];
+        newId = lastTamagochi ? lastTamagochi.id + 1 : 1;
+      }
+
+      // Crie o Tamagochi sem o id
       const response = await tamagochiDatabase.create({
         name,
         hunger,
@@ -35,8 +58,9 @@ export default function Index() {
       });
 
       Alert.alert("Tamagochi cadastrado com o ID: " + response.insertedRowId);
+      await list();
     } catch (error) {
-      console.log(error);
+      console.log("Erro ao criar Tamagochi:", error);
     }
   }
 
@@ -54,7 +78,7 @@ export default function Index() {
 
         Alert.alert("Tamagochi atualizado!");
       } catch (error) {
-        console.log(error);
+        console.log("Erro ao atualizar Tamagochi:", error);
       }
     }
   }
@@ -63,17 +87,32 @@ export default function Index() {
     try {
       const response = await tamagochiDatabase.searchByName(search);
       setTamagochis(response);
+
+      // Atualiza a lista de IDs disponíveis
+      const usedIds = response.map((item) => item.id);
+      setAvailableIds((prev) => {
+        // Adiciona IDs que não estão mais em uso à lista de IDs disponíveis
+        const newAvailableIds = prev.filter((id) => !usedIds.includes(id));
+        return [...newAvailableIds, ...usedIds].sort();
+      });
     } catch (error) {
-      console.log(error);
+      console.log("Erro ao listar Tamagochis:", error);
     }
   }
 
   async function remove(id: number) {
     try {
       await tamagochiDatabase.remove(id);
+      setAvailableIds((prev) => {
+        // Adiciona o ID removido à lista de IDs disponíveis
+        if (!prev.includes(id)) {
+          return [...prev, id].sort();
+        }
+        return prev;
+      });
       await list();
     } catch (error) {
-      console.log(error);
+      console.log("Erro ao remover Tamagochi:", error);
     }
   }
 
@@ -89,7 +128,7 @@ export default function Index() {
         setImage(item.image);
       }
     } catch (error) {
-      console.log(error);
+      console.log("Erro ao mostrar detalhes do Tamagochi:", error);
     }
   }
 
@@ -98,6 +137,11 @@ export default function Index() {
   }
 
   async function handleSave() {
+    if (name.trim() === "") {
+      Alert.alert("Erro", "O nome do Tamagochi é obrigatório!");
+      return;
+    }
+
     if (id) {
       await update();
     } else {
@@ -109,7 +153,7 @@ export default function Index() {
     setHunger(100);
     setSleep(100);
     setFun(100);
-    setImage(IMAGES[0].uri); // Reset to default image
+    setImage(IMAGES[0].uri); // Reset para a imagem padrão
     await list();
   }
 
@@ -121,26 +165,35 @@ export default function Index() {
     <View style={styles.container}>
       <View style={styles.formContainer}>
         <Text style={styles.title}>Cadastro de Tamagochi</Text>
-        <Input 
-          placeholder="Nome do Tamagochi" 
-          onChangeText={setName} 
-          value={name} 
+        <Input
+          placeholder="Nome do Tamagochi"
+          onChangeText={setName}
+          value={name}
         />
-        
+
         <View style={styles.imageContainer}>
           {IMAGES.map((img, index) => (
-            <TouchableOpacity key={index} onPress={() => handleImageSelect(img.uri)}>
-              <Image source={img.uri} style={[styles.image, image === img.uri && styles.selectedImage]} />
+            <TouchableOpacity
+              key={index}
+              onPress={() => handleImageSelect(img.uri)}
+            >
+              <Image
+                source={img.uri}
+                style={[
+                  styles.image,
+                  image === img.uri && styles.selectedImage,
+                ]}
+              />
             </TouchableOpacity>
           ))}
         </View>
 
         <Button title="Salvar" onPress={handleSave} color="#4CAF50" />
 
-        <Input 
-          placeholder="Pesquisar Tamagochis" 
-          onChangeText={setSearch} 
-          value={search} 
+        <Input
+          placeholder="Pesquisar Tamagochis"
+          onChangeText={setSearch}
+          value={search}
         />
 
         <FlatList
@@ -164,17 +217,17 @@ export default function Index() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#f5f5f5",
   },
   formContainer: {
-    width: '90%',
+    width: "90%",
     maxWidth: 600,
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     padding: 20,
     borderRadius: 8,
-    shadowColor: '#000',
+    shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
@@ -182,21 +235,21 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 24,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   input: {
-    backgroundColor: '#fff',
+    backgroundColor: "#fff",
     borderRadius: 8,
     padding: 12,
     marginBottom: 20,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
     borderWidth: 1,
   },
   imageContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
     marginVertical: 20,
   },
   image: {
@@ -204,10 +257,10 @@ const styles = StyleSheet.create({
     height: 80,
     borderRadius: 8,
     borderWidth: 2,
-    borderColor: 'transparent',
+    borderColor: "transparent",
   },
   selectedImage: {
-    borderColor: '#007bff',
+    borderColor: "#007bff",
   },
   flatList: {
     paddingTop: 10,

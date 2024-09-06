@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React from "react";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 
 export type TamagochiProps = {
   data: {
@@ -8,17 +8,33 @@ export type TamagochiProps = {
     hunger: number;
     sleep: number;
     fun: number;
-    image: string;
+    image: string; // The image uri string saved in the database
   };
   onPress: () => Promise<void>;
   onDelete: () => Promise<void>;
   onOpen: () => void;
 };
 
-export const Tamagochi: React.FC<TamagochiProps> = ({ data, onPress, onDelete, onOpen }) => {
+const IMAGES = {
+  eevee: require("@/assets/images/eevee.png"),
+  piplup: require("@/assets/images/piplup.png"),
+  ponyta: require("@/assets/images/ponyta.jpg"),
+  jigglypuff: require("@/assets/images/jigglypuff.png"),
+};
+
+export const Tamagochi: React.FC<TamagochiProps> = ({
+  data,
+  onPress,
+  onDelete,
+  onOpen,
+}) => {
+  // Find the matching image from the IMAGES object based on the saved uri
+  const selectedImage = Object.values(IMAGES).find((img) => img === data.image);
+
   return (
     <View style={styles.container}>
-      <Image source={{ uri: data.image }} style={styles.image} />
+      {/* Display the selected image */}
+      <Image source={selectedImage || IMAGES.eevee} style={styles.image} />
       <View style={styles.infoContainer}>
         <Text style={styles.name}>{data.name}</Text>
         <View style={styles.statsContainer}>
@@ -27,10 +43,16 @@ export const Tamagochi: React.FC<TamagochiProps> = ({ data, onPress, onDelete, o
           <Text style={styles.stats}>Diversão: {data.fun}</Text>
         </View>
         <View style={styles.buttonsContainer}>
-          <TouchableOpacity onPress={onPress} style={[styles.button, styles.detailsButton]}>
+          <TouchableOpacity
+            onPress={onPress}
+            style={[styles.button, styles.detailsButton]}
+          >
             <Text style={styles.buttonText}>Abrir</Text>
           </TouchableOpacity>
-          <TouchableOpacity onPress={onDelete} style={[styles.button, styles.deleteButton]}>
+          <TouchableOpacity
+            onPress={onDelete}
+            style={[styles.button, styles.deleteButton]}
+          >
             <Text style={styles.buttonText}>Excluir</Text>
           </TouchableOpacity>
         </View>
@@ -41,11 +63,11 @@ export const Tamagochi: React.FC<TamagochiProps> = ({ data, onPress, onDelete, o
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     padding: 15,
     borderRadius: 10,
-    backgroundColor: '#f9f9f9',
+    backgroundColor: "#f9f9f9",
     elevation: 3,
     marginBottom: 10,
   },
@@ -55,16 +77,16 @@ const styles = StyleSheet.create({
     borderRadius: 45,
     marginRight: 15,
     borderWidth: 2,
-    borderColor: '#ddd',
+    borderColor: "#ddd",
   },
   infoContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   name: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
+    fontWeight: "bold",
+    color: "#333",
     marginBottom: 5,
   },
   statsContainer: {
@@ -72,31 +94,31 @@ const styles = StyleSheet.create({
   },
   stats: {
     fontSize: 16,
-    color: '#666',
+    color: "#666",
     marginVertical: 2,
   },
   buttonsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   button: {
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 5,
     marginHorizontal: 5,
-    alignItems: 'center',
+    alignItems: "center",
   },
   buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
+    color: "#fff",
+    fontWeight: "bold",
   },
   detailsButton: {
-    backgroundColor: '#4CAF50',
+    backgroundColor: "#4CAF50",
   },
   deleteButton: {
-    backgroundColor: '#f44336',
+    backgroundColor: "#f44336",
   },
   openButton: {
-    backgroundColor: '#2196F3',
+    backgroundColor: "#2196F3",
   },
 });
