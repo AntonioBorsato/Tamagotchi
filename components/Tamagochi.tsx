@@ -8,7 +8,7 @@ export type TamagochiProps = {
     hunger: number;
     sleep: number;
     fun: number;
-    image: string; // Chave da imagem
+    image: string; 
   };
   onPress: () => Promise<void>;
   onDelete: () => Promise<void>;

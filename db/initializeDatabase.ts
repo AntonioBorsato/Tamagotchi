@@ -1,6 +1,5 @@
 import { type SQLiteDatabase } from "expo-sqlite";
 
-// Função para inicializar o banco de dados
 export async function initializeDatabase(database: SQLiteDatabase) {
   if (!database) {
     console.error("Banco de dados não está inicializado.");
@@ -17,7 +16,7 @@ export async function initializeDatabase(database: SQLiteDatabase) {
         hunger INTEGER NOT NULL DEFAULT 100, 
         sleep INTEGER NOT NULL DEFAULT 100,   
         fun INTEGER NOT NULL DEFAULT 100,     
-        image TEXT NOT NULL DEFAULT 'eevee'
+        image TEXT NOT NULL DEFAULT
       );
     `);
 
