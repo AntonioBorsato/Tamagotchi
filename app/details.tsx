@@ -1,91 +1,96 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, Image, StyleSheet, Button, Alert } from "react-native";
-import { useRoute, useNavigation } from "@react-navigation/native";
+import {
+  View,
+  Text,
+  Image,
+  StyleSheet,
+  Button,
+  ScrollView,
+  Alert,
+} from "react-native";
+import { useRouter } from "expo-router";
 import { useTamagochiDatabase, TamagochiDatabase } from "@/db/useTamagochiDatabase";
+import { useRoute } from "@react-navigation/native";
+
+// Mapa estático de imagens com índice de assinatura para strings
+const IMAGES: Record<string, any> = {
+  eevee: require("@/assets/images/eevee.png"),
+  piplup: require("@/assets/images/piplup.png"),
+  ponyta: require("@/assets/images/ponyta.png"),
+  jigglypuff: require("@/assets/images/jigglypuff.png"),
+};
 
 export default function Details() {
-  const route = useRoute();
-  const navigation = useNavigation();
-  const { id } = route.params as { id: string };
   const [tamagochi, setTamagochi] = useState<TamagochiDatabase | null>(null);
+  const router = useRouter();
+  const route = useRoute();
+  const { id } = route.params as { id: string }; // Obtém o id da rota
+
   const tamagochiDatabase = useTamagochiDatabase();
 
   useEffect(() => {
     async function fetchTamagochi() {
       try {
-        const data = await tamagochiDatabase.show(Number(id)); // Use 'show' aqui
-        setTamagochi(data);
+        const item = await tamagochiDatabase.show(Number(id)); // Converte o id para número
+        if (item) {
+          setTamagochi(item);
+        } else {
+          Alert.alert("Erro", "Tamagochi não encontrado.");
+        }
       } catch (error) {
-        console.log(error);
+        console.log("Erro ao buscar Tamagochi:", error);
+        Alert.alert("Erro", "Erro ao buscar Tamagochi.");
       }
     }
 
     fetchTamagochi();
   }, [id]);
 
-  async function handleDelete() {
-    try {
-      await tamagochiDatabase.remove(Number(id));
-      Alert.alert("Tamagochi deletado com sucesso!");
-      navigation.goBack();
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  if (!tamagochi) {
-    return (
-      <View style={styles.container}>
-        <Text>Carregando...</Text>
-      </View>
-    );
-  }
-
-  // Validando se a imagem é um número válido para acessar o array
-  const imageIndex = Number(tamagochi.image); // Supondo que `image` é um índice numérico
-
-  // Verifique se imageIndex está dentro dos limites do array
-  const imageSource = (imageIndex >= 0 && imageIndex < IMAGES.length) 
-    ? IMAGES[imageIndex]
-    : IMAGES[0]; // Usar uma imagem padrão caso o índice esteja fora dos limites
+  // Obtém a imagem com base no nome
+  const getImageSource = (imageKey: string) => {
+    return IMAGES[imageKey] || IMAGES.eevee; // Fallback para uma imagem padrão se a chave não for encontrada
+  };
 
   return (
-    <View style={styles.container}>
-      <Image
-        source={imageSource}
-        style={styles.image}
-      />
-      <Text style={styles.text}>Nome: {tamagochi.name}</Text>
-      <Text style={styles.text}>Fome: {tamagochi.hunger}</Text>
-      <Text style={styles.text}>Sono: {tamagochi.sleep}</Text>
-      <Text style={styles.text}>Diversão: {tamagochi.fun}</Text>
-      <Button title="Deletar" onPress={handleDelete} />
-    </View>
+    <ScrollView contentContainerStyle={styles.container}>
+      {tamagochi ? (
+        <View style={styles.detailsContainer}>
+          <Image source={getImageSource(tamagochi.image)} style={styles.image} />
+          <Text style={styles.name}>{tamagochi.name}</Text>
+          <Text style={styles.stats}>Fome: {tamagochi.hunger}</Text>
+          <Text style={styles.stats}>Sono: {tamagochi.sleep}</Text>
+          <Text style={styles.stats}>Diversão: {tamagochi.fun}</Text>
+          <Button title="Voltar" onPress={() => router.back()} color="#4CAF50" />
+        </View>
+      ) : (
+        <Text>Carregando...</Text>
+      )}
+    </ScrollView>
   );
 }
-
-const IMAGES = [
-  require('@/assets/images/eevee.png'),
-  require('@/assets/images/piplup.png'),
-  require('@/assets/images/ponyta.png'),
-  require('@/assets/images/jigglypuff.png'),
-];
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 16,
+    backgroundColor: "#f5f5f5",
+  },
+  detailsContainer: {
+    alignItems: "center",
+    padding: 20,
   },
   image: {
     width: 150,
     height: 150,
     borderRadius: 8,
-    marginBottom: 16,
+    marginBottom: 20,
   },
-  text: {
+  name: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  stats: {
     fontSize: 18,
-    marginVertical: 4,
+    marginVertical: 5,
   },
 });
