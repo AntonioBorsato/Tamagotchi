@@ -47,13 +47,19 @@ export const Tamagochi: React.FC<TamagochiProps> = ({
             onPress={onPress}
             style={[styles.button, styles.detailsButton]}
           >
-            <Text style={styles.buttonText}>Abrir</Text>
+            <Text style={styles.buttonText}>Editar</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={onDelete}
             style={[styles.button, styles.deleteButton]}
           >
             <Text style={styles.buttonText}>Excluir</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={onOpen}
+            style={[styles.button, styles.openButton]}
+          >
+            <Text style={styles.buttonText}>Abrir</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -113,9 +119,12 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   detailsButton: {
-    backgroundColor: "#4CAF50",
+    backgroundColor: "blue",
   },
   deleteButton: {
     backgroundColor: "#f44336",
+  },
+  openButton: {
+    backgroundColor: "#4CAF50",
   },
 });

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import {
   View,
   Button,
-  FlatList,
   Alert,
   TouchableOpacity,
   Image,
   StyleSheet,
   Text,
+  ScrollView,
 } from "react-native";
 import { router } from "expo-router";
 import { Input } from "@/components/input";
@@ -17,7 +17,6 @@ import {
   TamagochiDatabase,
 } from "@/db/useTamagochiDatabase";
 
-// Definindo IMAGES como um objeto de strings para os URIs das imagens
 const IMAGES: Record<string, any> = {
   eevee: require("@/assets/images/eevee.png"),
   piplup: require("@/assets/images/piplup.png"),
@@ -136,10 +135,10 @@ export default function Index() {
   }, [search]);
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.formContainer}>
         <Text style={styles.title}>Cadastro de Tamagochi</Text>
-        <Input 
+        <Input
           placeholder="Nome do Tamagochi"
           onChangeText={setName}
           value={name}
@@ -171,20 +170,16 @@ export default function Index() {
         />
       </View>
 
-      <FlatList
-        data={tamagochis}
-        keyExtractor={(item) => String(item.id)}
-        renderItem={({ item }) => (
-          <Tamagochi
-            data={item}
-            onPress={() => showDetails(item.id)}
-            onDelete={() => remove(item.id)}
-            onOpen={() => router.push(`../details/${item.id}`)}
-          />
-        )}
-        contentContainerStyle={styles.flatList}
-      />
-    </View>
+      {tamagochis.map((item) => (
+        <Tamagochi
+          key={item.id}
+          data={item}
+          onPress={() => showDetails(item.id)}
+          onDelete={() => remove(item.id)}
+          onOpen={() => router.push(`../details/${item.id}`)}
+        />
+      ))}
+    </ScrollView>
   );
 }
 
@@ -230,8 +225,4 @@ const styles = StyleSheet.create({
   selectedImage: {
     borderColor: "#007bff",
   },
-  flatList: {
-    paddingTop: 10,
-  },
 });
-
