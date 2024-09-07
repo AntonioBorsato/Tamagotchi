@@ -67,7 +67,7 @@ export default function Details() {
 const IMAGES = [
   require('@/assets/images/eevee.png'),
   require('@/assets/images/piplup.png'),
-  require('@/assets/images/ponyta.jpg'),
+  require('@/assets/images/ponyta.png'),
   require('@/assets/images/jigglypuff.png'),
 ];
 

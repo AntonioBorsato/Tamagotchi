@@ -21,7 +21,7 @@ import {
 const IMAGES: Record<string, any> = {
   eevee: require("@/assets/images/eevee.png"),
   piplup: require("@/assets/images/piplup.png"),
-  ponyta: require("@/assets/images/ponyta.jpg"),
+  ponyta: require("@/assets/images/ponyta.png"),
   jigglypuff: require("@/assets/images/jigglypuff.png"),
 };
 
