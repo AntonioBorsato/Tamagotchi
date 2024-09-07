@@ -139,7 +139,7 @@ export default function Index() {
     <View style={styles.container}>
       <View style={styles.formContainer}>
         <Text style={styles.title}>Cadastro de Tamagochi</Text>
-        <Input
+        <Input 
           placeholder="Nome do Tamagochi"
           onChangeText={setName}
           value={name}
@@ -216,11 +216,11 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flexDirection: "row",
-    flexWrap: "wrap", // Permite que as imagens ocupem mais de uma linha
-    justifyContent: "space-between", // Espaça as imagens uniformemente
+    flexWrap: "wrap", 
+    justifyContent: "space-between", 
   },
   image: {
-    width: 150, // Faz as imagens ocuparem aproximadamente metade da largura disponível
+    width: 150, 
     height: 100,
     borderRadius: 8,
     marginVertical: 10,
