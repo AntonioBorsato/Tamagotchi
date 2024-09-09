@@ -12,7 +12,6 @@ import { useRouter } from "expo-router";
 import { useTamagochiDatabase, TamagochiDatabase } from "@/db/useTamagochiDatabase";
 import { useRoute } from "@react-navigation/native";
 
-// Mapa estático de imagens com índice de assinatura para strings
 const IMAGES: Record<string, any> = {
   eevee: require("@/assets/images/eevee.png"),
   piplup: require("@/assets/images/piplup.png"),
@@ -24,14 +23,14 @@ export default function Details() {
   const [tamagochi, setTamagochi] = useState<TamagochiDatabase | null>(null);
   const router = useRouter();
   const route = useRoute();
-  const { id } = route.params as { id: string }; // Obtém o id da rota
+  const { id } = route.params as { id: string };
 
   const tamagochiDatabase = useTamagochiDatabase();
 
   useEffect(() => {
     async function fetchTamagochi() {
       try {
-        const item = await tamagochiDatabase.show(Number(id)); // Converte o id para número
+        const item = await tamagochiDatabase.show(Number(id));
         if (item) {
           setTamagochi(item);
         } else {
@@ -42,13 +41,12 @@ export default function Details() {
         Alert.alert("Erro", "Erro ao buscar Tamagochi.");
       }
     }
-
     fetchTamagochi();
   }, [id]);
 
-  // Obtém a imagem com base no nome
+
   const getImageSource = (imageKey: string) => {
-    return IMAGES[imageKey] || IMAGES.eevee; // Fallback para uma imagem padrão se a chave não for encontrada
+    return IMAGES[imageKey] || IMAGES.eevee;
   };
 
   return (
@@ -60,7 +58,16 @@ export default function Details() {
           <Text style={styles.stats}>Fome: {tamagochi.hunger}</Text>
           <Text style={styles.stats}>Sono: {tamagochi.sleep}</Text>
           <Text style={styles.stats}>Diversão: {tamagochi.fun}</Text>
-          <Button title="Voltar" onPress={() => router.back()} color="#4CAF50" />
+
+          <View style={styles.buttonContainer}>
+            <Button title="Alimentar" color="#4CAF50" />
+            <Button title="Dormir" color="#6A5ACD" />
+            <Button
+              title="Jogos"
+              onPress={() => router.push("/gamesScreen")}
+              color="#FF4500"
+            />
+          </View>
         </View>
       ) : (
         <Text>Carregando...</Text>
@@ -72,25 +79,41 @@ export default function Details() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#f0f0f0",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
   },
   detailsContainer: {
     alignItems: "center",
+    backgroundColor: "#fff",
     padding: 20,
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
   },
   image: {
     width: 150,
     height: 150,
-    borderRadius: 8,
+    borderRadius: 10,
     marginBottom: 20,
   },
   name: {
-    fontSize: 24,
+    fontSize: 26,
     fontWeight: "bold",
     marginBottom: 10,
   },
   stats: {
     fontSize: 18,
-    marginVertical: 5,
+    marginBottom: 5,
+  },
+  buttonContainer: {
+    marginTop: 20,
+    width: "100%",
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
 });

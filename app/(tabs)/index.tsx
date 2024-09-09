@@ -176,7 +176,7 @@ export default function Index() {
           data={item}
           onPress={() => showDetails(item.id)}
           onDelete={() => remove(item.id)}
-          onOpen={() => router.push({ pathname: `../details`, params: { id: item.id } })}
+          onOpen={() => router.push({ pathname: '../details', params: { id: item.id } })}
         />
       ))}
     </ScrollView>
