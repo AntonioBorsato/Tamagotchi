@@ -72,6 +72,7 @@ export default function Details() {
       ) : (
         <Text>Carregando...</Text>
       )}
+      <Button title="Voltar" onPress={() => router.back()} color="#FF4500" />
     </ScrollView>
   );
 }

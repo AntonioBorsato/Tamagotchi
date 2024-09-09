@@ -35,8 +35,10 @@ export default function RootLayout() {
     <SQLiteProvider databaseName="myDatabase.db" onInit={initializeDatabase}>
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
         <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+          <Stack.Screen name="details" options={{ headerShown: false }} />
+          <Stack.Screen name="gamesScreen" options={{ headerShown: false }} />
+          
         </Stack>
       </ThemeProvider>
     </SQLiteProvider>
