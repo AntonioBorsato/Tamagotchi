@@ -45,7 +45,7 @@ export default function Index() {
         fun,
         image,
       });
-      Alert.alert("Tamagochi cadastrado com o ID: " + response.insertedRowId);
+      Alert.alert("Tamagochi cadastrado");
       await list();
     } catch (error) {
       console.log("Erro ao criar Tamagochi:", error);
@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between", 
   },
   image: {
-    width: 150, 
+    width: 120, 
     height: 100,
     borderRadius: 8,
     marginVertical: 10,

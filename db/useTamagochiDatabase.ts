@@ -12,7 +12,6 @@ export type TamagochiDatabase = {
 export function useTamagochiDatabase() {
   const database = useSQLiteContext();
 
-  // Função para buscar IDs disponíveis para reutilização
   async function getAvailableIds(): Promise<number[]> {
     try {
       const query = `
@@ -27,7 +26,6 @@ export function useTamagochiDatabase() {
     }
   }
 
-  // Função modificada para criar um Tamagochi sem ID
   async function create(data: Omit<TamagochiDatabase, "id">) {
     const statement = await database.prepareAsync(`
       INSERT INTO tamagochis (name, hunger, sleep, fun, image) VALUES (?, ?, ?, ?, ?)
@@ -39,7 +37,7 @@ export function useTamagochiDatabase() {
         data.hunger,
         data.sleep,
         data.fun,
-        data.image, // Ensure this is a key, not a URI
+        data.image, 
       ]);
 
       return { insertedRowId: result.lastInsertRowId };

@@ -28,12 +28,11 @@ export const Tamagochi: React.FC<TamagochiProps> = ({
   onDelete,
   onOpen,
 }) => {
-  // Acessa diretamente a imagem com a chave
+
   const selectedImage = IMAGES[data.image as keyof typeof IMAGES];
 
   return (
     <View style={styles.container}>
-      {/* Exibe a imagem selecionada */}
       <Image source={selectedImage || IMAGES.eevee} style={styles.image} />
       <View style={styles.infoContainer}>
         <Text style={styles.name}>{data.name}</Text>

@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { View, Text, TouchableOpacity, Button, StyleSheet, Alert } from "react-native";
 
-// Inicializa o tabuleiro
 const initialBoard = ["", "", "", "", "", "", "", "", ""];
 
 export default function TicTacToe() {
@@ -43,7 +42,6 @@ export default function TicTacToe() {
       .filter((value) => value !== null) as number[];
 
     if (level === "hard") {
-      // Computador tenta vencer ou bloquear jogador no nível "hard"
       for (let player of ["O", "X"]) {
         for (let move of availableMoves) {
           const testBoard = [...newBoard];
@@ -75,7 +73,6 @@ export default function TicTacToe() {
     if (winner) {
       announceWinner(winner);
     } else {
-      // Faz a jogada do computador após 500ms
       setTimeout(() => {
         const move = computerMove(newBoard, difficulty);
         if (move !== undefined) {
