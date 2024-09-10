@@ -25,7 +25,6 @@ const countries = [
   { name: 'Benim', latitude: 9.3085, longitude: 2.3158 },
   { name: 'Bermudas', latitude: 32.3078, longitude: -64.7505 },
   { name: 'Botswana', latitude: -22.3285, longitude: 24.6849 },
-  { name: 'Brasil', latitude: -14.2350, longitude: -51.9253 },
   { name: 'Brunei', latitude: 4.5353, longitude: 114.7277 },
   { name: 'Bulgária', latitude: 42.7339, longitude: 25.4858 },
   { name: 'Burquina Faso', latitude: 12.2383, longitude: -1.5616 },
@@ -278,7 +277,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     paddingHorizontal: 20,
-    marginTop: 100,
+    marginTop: 80,
   },
   quizContainer: {
 
