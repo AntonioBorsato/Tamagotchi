@@ -220,7 +220,7 @@ const quizGame = () => {
       setDistance(distInKilometers);
 
       const userGuessInKilometers = parseFloat(userGuess);
-      const marginOfError = 300; 
+      const marginOfError = 600; 
       if (userGuessInKilometers >= distInKilometers - marginOfError && userGuessInKilometers <= distInKilometers + marginOfError) {
         setIsCorrect(true);
       } else {
