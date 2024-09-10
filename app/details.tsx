@@ -8,9 +8,20 @@ import {
   ScrollView,
   Alert,
 } from "react-native";
-import { useRouter } from "expo-router";
-import { useTamagochiDatabase, TamagochiDatabase } from "@/db/useTamagochiDatabase";
+import { useRouter, router } from "expo-router";
+import {
+  useTamagochiDatabase,
+  TamagochiDatabase,
+} from "@/db/useTamagochiDatabase";
 import { useRoute } from "@react-navigation/native";
+
+import {
+  ButtonTama,
+  ButtonAlimentar,
+  ButtonDormir,
+  ButtonJogar,
+} from "@/components/Button";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const IMAGES: Record<string, any> = {
   eevee: require("@/assets/images/eevee.png"),
@@ -44,43 +55,52 @@ export default function Details() {
     fetchTamagochi();
   }, [id]);
 
-
   const getImageSource = (imageKey: string) => {
     return IMAGES[imageKey] || IMAGES.eevee;
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      {tamagochi ? (
-        <View style={styles.detailsContainer}>
-          <Image source={getImageSource(tamagochi.image)} style={styles.image} />
-          <Text style={styles.name}>{tamagochi.name}</Text>
-          <Text style={styles.stats}>Fome: {tamagochi.hunger}</Text>
-          <Text style={styles.stats}>Sono: {tamagochi.sleep}</Text>
-          <Text style={styles.stats}>Diversão: {tamagochi.fun}</Text>
-
-          <View style={styles.buttonContainer}>
-            <Button title="Alimentar" color="#4CAF50" />
-            <Button title="Dormir" color="#6A5ACD" />
-            <Button
-              title="Jogos"
-              onPress={() => router.push("/gamesScreen")}
-              color="#FF4500"
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <ScrollView contentContainerStyle={styles.container}>
+        {tamagochi ? (
+          <View style={styles.detailsContainer}>
+            <Image
+              source={getImageSource(tamagochi.image)}
+              style={styles.image}
             />
+            <Text style={styles.name}>{tamagochi.name}</Text>
+            <Text style={styles.stats}>Fome: {tamagochi.hunger}</Text>
+            <Text style={styles.stats}>Sono: {tamagochi.sleep}</Text>
+            <Text style={styles.stats}>Diversão: {tamagochi.fun}</Text>
+
+            <View style={styles.buttonContainer}>
+              <ButtonAlimentar
+                labelButton="Alimentar"
+                onpress={() => alert("Bixin alimentado")}
+              />
+              <ButtonDormir
+                labelButton="Dormir"
+                onpress={() => alert("Zzz...")}
+              />
+              <ButtonJogar
+                labelButton="Jogar"
+                onpress={() => router.push("/gamesScreen")}
+              />
+            </View>
           </View>
-        </View>
-      ) : (
-        <Text>Carregando...</Text>
-      )}
-      <Button title="Voltar" onPress={() => router.back()} color="#FF4500" />
-    </ScrollView>
+        ) : (
+          <Text>Carregando...</Text>
+        )}
+        <Button title="Voltar" onPress={() => router.back()} color="#FF4500" />
+      </ScrollView>
+    </GestureHandlerRootView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f0f0f0",
+    backgroundColor: "#f1f1f1f1",
     justifyContent: "center",
     alignItems: "center",
     padding: 20,
@@ -89,7 +109,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#fff",
     padding: 20,
-    borderRadius: 10,
+    borderRadius: 24,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
@@ -112,9 +132,9 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   buttonContainer: {
-    marginTop: 20,
+    marginTop: 24,
     width: "100%",
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-between",
   },
 });

@@ -18,12 +18,16 @@ import {
   TamagochiDatabase,
 } from "@/db/useTamagochiDatabase";
 
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+
 const IMAGES: Record<string, any> = {
   eevee: require("@/assets/images/eevee.png"),
   piplup: require("@/assets/images/piplup.png"),
   ponyta: require("@/assets/images/ponyta.png"),
   jigglypuff: require("@/assets/images/jigglypuff.png"),
 };
+
+import { ButtonTama, ButtonAlimentar } from "@/components/Button";
 
 export default function Index() {
   const [id, setId] = useState<string | null>(null);
@@ -131,55 +135,78 @@ export default function Index() {
     await list();
   }
 
+  function statusTamagotchi(statusTamagotchi: number) {
+    switch (true) {
+      case statusTamagotchi < 1:
+        return "Morto!";
+      case statusTamagotchi < 51:
+        return "Critico!";
+      case statusTamagotchi < 101:
+        return "Muito triste...";
+      case statusTamagotchi < 151:
+        return "Triste";
+      case statusTamagotchi < 201:
+        return "OK";
+      case statusTamagotchi < 251:
+        return "Até que tá bem";
+      case statusTamagotchi < 301:
+        return "Muito Bem !!";
+
+      default:
+        return "Status Indefinido ";
+    }
+  }
   useEffect(() => {
     list();
   }, [search]);
 
   return (
-    <ScrollView style={styles.container}>
-      <View style={styles.formContainer}>
-        <Text style={styles.title}>Cadastro de Tamagochi</Text>
-        <Input
-          placeholder="Nome do Tamagochi"
-          onChangeText={setName}
-          value={name}
-        />
+    <GestureHandlerRootView>
+      <ScrollView style={styles.container}>
+        <View style={styles.formContainer}>
+          <Text style={styles.title}>Cadastro de Tamagochi</Text>
+          <Input
+            placeholder="Nome do Tamagochi"
+            onChangeText={setName}
+            value={name}
+          />
 
-        <View style={styles.imageContainer}>
-          {Object.keys(IMAGES).map((key, index) => (
-            <TouchableOpacity
-              key={index}
-              onPress={() => handleImageSelect(key)}
-            >
-              <Image
-                source={IMAGES[key]}
-                style={[styles.image, image === key && styles.selectedImage]}
-              />
-            </TouchableOpacity>
-          ))}
+          <View style={styles.imageContainer}>
+            {Object.keys(IMAGES).map((key, index) => (
+              <TouchableOpacity
+                key={index}
+                onPress={() => handleImageSelect(key)}
+              >
+                <Image
+                  source={IMAGES[key]}
+                  style={[styles.image, image === key && styles.selectedImage]}
+                />
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          <ButtonTama labelButton="Salvar" onpress={handleSave} />
+
+          <Input
+            placeholder="Pesquisar Tamagochis"
+            onChangeText={setSearch}
+            value={search}
+          />
         </View>
 
-        <Button title="Salvar" onPress={handleSave} color="#4CAF50" />
-
-        <Input
-          placeholder="Pesquisar Tamagochis"
-          onChangeText={setSearch}
-          value={search}
-        />
-      </View>
-
-      {tamagochis.map((item) => (
-        <Tamagochi
-          key={item.id}
-          data={item}
-          onPress={() => showDetails(item.id)}
-          onDelete={() => remove(item.id)}
-          onOpen={() =>
-            router.push({ pathname: "../details", params: { id: item.id } })
-          }
-        />
-      ))}
-    </ScrollView>
+        {tamagochis.map((item) => (
+          <Tamagochi
+            key={item.id}
+            data={item}
+            onPress={() => showDetails(item.id)}
+            onDelete={() => remove(item.id)}
+            onOpen={() =>
+              router.push({ pathname: "../details", params: { id: item.id } })
+            }
+          />
+        ))}
+      </ScrollView>
+    </GestureHandlerRootView>
   );
 }
 

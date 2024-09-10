@@ -9,31 +9,6 @@ export type TamagochiDatabase = {
   image: string;
 };
 
-// Função que calcula o status do Tamagochi com base nos atributos
-export function calculateStatus(
-  hunger: number,
-  sleep: number,
-  fun: number
-): string {
-  const total = hunger + sleep + fun;
-
-  if (total === 0) {
-    return "morto";
-  } else if (total >= 1 && total <= 50) {
-    return "crítico";
-  } else if (total >= 51 && total <= 100) {
-    return "muito triste";
-  } else if (total >= 101 && total <= 150) {
-    return "triste";
-  } else if (total >= 151 && total <= 200) {
-    return "ok";
-  } else if (total >= 201 && total <= 250) {
-    return "bem";
-  } else {
-    return "muito bem";
-  }
-}
-
 export function useTamagochiDatabase() {
   const database = useSQLiteContext();
 
@@ -136,6 +111,5 @@ export function useTamagochiDatabase() {
     remove,
     show,
     getAvailableIds,
-    calculateStatus, // Certifique-se de exportar a função
   };
 }
