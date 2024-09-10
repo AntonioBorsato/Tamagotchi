@@ -8,7 +8,7 @@ export type TamagochiProps = {
     hunger: number;
     sleep: number;
     fun: number;
-    image: string; 
+    image: string;
   };
   onPress: () => Promise<void>;
   onDelete: () => Promise<void>;
@@ -28,7 +28,6 @@ export const Tamagochi: React.FC<TamagochiProps> = ({
   onDelete,
   onOpen,
 }) => {
-
   const selectedImage = IMAGES[data.image as keyof typeof IMAGES];
 
   return (

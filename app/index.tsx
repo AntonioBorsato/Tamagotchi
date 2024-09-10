@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+
 import {
   View,
   Button,
@@ -152,10 +153,7 @@ export default function Index() {
             >
               <Image
                 source={IMAGES[key]}
-                style={[
-                  styles.image,
-                  image === key && styles.selectedImage,
-                ]}
+                style={[styles.image, image === key && styles.selectedImage]}
               />
             </TouchableOpacity>
           ))}
@@ -176,7 +174,9 @@ export default function Index() {
           data={item}
           onPress={() => showDetails(item.id)}
           onDelete={() => remove(item.id)}
-          onOpen={() => router.push({ pathname: '../details', params: { id: item.id } })}
+          onOpen={() =>
+            router.push({ pathname: "../details", params: { id: item.id } })
+          }
         />
       ))}
     </ScrollView>
@@ -211,11 +211,11 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     flexDirection: "row",
-    flexWrap: "wrap", 
-    justifyContent: "space-between", 
+    flexWrap: "wrap",
+    justifyContent: "space-between",
   },
   image: {
-    width: 120, 
+    width: 120,
     height: 100,
     borderRadius: 8,
     marginVertical: 10,
