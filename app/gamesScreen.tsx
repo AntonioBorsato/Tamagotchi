@@ -12,8 +12,8 @@ export default function GamesScreen() {
         <Button title="Iniciar" onPress={() => router.push("/jogoDaVelha")} color="#4CAF50" />
       </View>
       <View style={styles.gameContainer}>
-        <Text style={styles.gameTitle}>Jogo 2</Text>
-        <Button title="Iniciar" onPress={() => router.push("/colorDetector")}  color="#4CAF50" />
+        <Text style={styles.gameTitle}>Adivinhar Distancia</Text>
+        <Button title="Iniciar" onPress={() => router.push("/quizGame")}  color="#4CAF50" />
       </View>
       <Button title="Voltar" onPress={() => router.back()} color="#FF4500" />
     </View>
