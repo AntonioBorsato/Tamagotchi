@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, Text, StyleSheet, Button, TextInput, Alert, Keyboard } from 'react-native';
+import { View, Text, StyleSheet, Button, TextInput, Alert, Keyboard, KeyboardAvoidingView } from 'react-native';
 import * as Location from 'expo-location';
 import { getDistance } from 'geolib';
-import { LocationObjectCoords } from 'expo-location';
 
 const countries = [
   { name: 'Afeganistão', latitude: 33.9391, longitude: 67.7100 },
@@ -186,7 +185,7 @@ const quizGame = () => {
   const [currentCountry, setCurrentCountry] = useState<{ name: string; latitude: number; longitude: number } | null>(null);
   const [userGuess, setUserGuess] = useState<string>('');
   const [distance, setDistance] = useState<number | null>(null);
-  const [isCorrect, setIsCorrect] = useState<boolean | null>(null); 
+  const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
   const inputRef = useRef<TextInput>(null);
 
   useEffect(() => {
@@ -220,7 +219,7 @@ const quizGame = () => {
       setDistance(distInKilometers);
 
       const userGuessInKilometers = parseFloat(userGuess);
-      const marginOfError = 600; 
+      const marginOfError = 600;
       if (userGuessInKilometers >= distInKilometers - marginOfError && userGuessInKilometers <= distInKilometers + marginOfError) {
         setIsCorrect(true);
       } else {
@@ -232,49 +231,59 @@ const quizGame = () => {
   };
 
   return (
-    <View style={styles.container}>
-      {currentCountry ? (
-        <View style={styles.quizContainer}>
-          {isCorrect !== null && (
-            <Text style={[styles.resultText, isCorrect ? styles.correct : styles.incorrect]}>
-              {isCorrect ? 'Correto!' : 'Incorreto!'}
-            </Text>
-          )}
-          <Text style={styles.questionText}>Qual a distância até {currentCountry.name}?</Text>
-          <Text style={styles.subtext}>Digite sua resposta em quilômetros:</Text>
-          <TextInput
-            style={styles.input}
-            keyboardType="numeric"
-            value={userGuess}
-            onChangeText={(text) => setUserGuess(text)}
-            placeholder="Digite sua resposta"
-            ref={inputRef}
-          />
-          <Button title="Verificar" onPress={checkAnswer} />
-          {distance !== null && (
-            <Text style={styles.resultText}>
-              A distância real é de {distance.toFixed(2)} quilômetros.
-            </Text>
-          )}
-          <Button title="Gerar novo País" onPress={generateQuestion} />
-        </View>
-      ) : (
-        <Button title="Gerar País" onPress={generateQuestion} />
-      )}
+    <View style={styles.root}>
+
+
+      <View style={styles.container}>
+        {currentCountry ? (
+          <View style={styles.quizContainer}>
+            {isCorrect !== null && (
+              <Text style={[styles.resultText, isCorrect ? styles.correct : styles.incorrect]}>
+                {isCorrect ? 'Correto!' : 'Incorreto!'}
+              </Text>
+            )}
+            <Text style={styles.questionText}>Qual a distância até {currentCountry.name}?</Text>
+            <Text style={styles.subtext}>Digite sua resposta em quilômetros:</Text>
+            <TextInput
+              style={styles.input}
+              keyboardType="numeric"
+              value={userGuess}
+              onChangeText={(text) => setUserGuess(text)}
+              placeholder="Digite sua resposta"
+              ref={inputRef}
+            />
+            <Button title="Verificar" onPress={checkAnswer} />
+            {distance !== null && (
+              <Text style={styles.resultText}>
+                A distância real é de {distance.toFixed(2)} quilômetros.
+              </Text>
+            )}
+            <Button title="Gerar novo País" onPress={generateQuestion} />
+          </View>
+        ) : (
+          <Button title="Gerar País" onPress={generateQuestion} />
+        )}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+  root: {
+    flex:1,
     backgroundColor: '#f0f4f8',
   },
-  quizContainer: {
+  container: {
+    flex: 1,
+    justifyContent: 'flex-start',
     alignItems: 'center',
+    paddingHorizontal: 20,
+    marginTop: 100,
+  },
+  quizContainer: {
+
+    alignItems: 'center',
+    justifyContent: "flex-start",
     backgroundColor: '#ffffff',
     borderRadius: 10,
     padding: 20,
@@ -285,6 +294,7 @@ const styles = StyleSheet.create({
     elevation: 5,
     width: '100%',
     maxWidth: 400,
+    //marginTop: 90,
   },
   questionText: {
     fontSize: 20,

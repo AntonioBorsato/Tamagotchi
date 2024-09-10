@@ -16,7 +16,6 @@ import {
 import { useRoute } from "@react-navigation/native";
 
 import {
-  ButtonTama,
   ButtonAlimentar,
   ButtonDormir,
   ButtonJogar,

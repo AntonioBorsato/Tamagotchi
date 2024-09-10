@@ -128,9 +128,9 @@ export default function Index() {
 
     setId(null);
     setName("");
-    setHunger(100);
-    setSleep(100);
-    setFun(100);
+    setHunger(70);
+    setSleep(70);
+    setFun(70);
     setImage("eevee");
     await list();
   }

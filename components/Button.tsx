@@ -6,24 +6,23 @@ import {
   TouchableOpacity,
 } from "react-native";
 
-// Define a interface para as propriedades do componente
 interface ButtonTamaProps {
   labelButton: string;
-  onpress?: (event?: GestureResponderEvent) => void; // Torna o evento opcional
+  onpress?: (event?: GestureResponderEvent) => void; 
 }
 
 interface ButtonAlimentarProps {
   labelButton: string;
-  onpress?: (event?: GestureResponderEvent) => void; // Torna o evento opcional
+  onpress?: (event?: GestureResponderEvent) => void; 
 }
 
 interface ButtonDormirProps {
   labelButton: string;
-  onpress?: (event?: GestureResponderEvent) => void; // Torna o evento opcional
+  onpress?: (event?: GestureResponderEvent) => void;
 }
 interface ButtonJogarProps {
   labelButton: string;
-  onpress?: (event?: GestureResponderEvent) => void; // Torna o evento opcional
+  onpress?: (event?: GestureResponderEvent) => void; 
 }
 
 const ButtonTama: React.FC<ButtonTamaProps> = ({ labelButton, onpress }) => {

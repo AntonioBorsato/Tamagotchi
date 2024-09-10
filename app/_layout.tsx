@@ -38,6 +38,7 @@ export default function RootLayout() {
           <Stack.Screen name="index" options={{ headerShown: false }} />
           <Stack.Screen name="details" options={{ headerShown: false }} />
           <Stack.Screen name="gamesScreen" options={{ headerShown: false }} />
+          <Stack.Screen name="quizGame" options={{ headerShown: false }} />
           
         </Stack>
       </ThemeProvider>
