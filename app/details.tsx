@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
   Image,
   StyleSheet,
-  Button,
   ScrollView,
   Alert,
+  Animated,
+  TouchableOpacity,
 } from "react-native";
-import { useRouter, router } from "expo-router";
+import { useRouter } from "expo-router";
 import {
-  useTamagochiDatabase,
   TamagochiDatabase,
+  useTamagochiDatabase,
 } from "@/db/useTamagochiDatabase";
 import { useRoute } from "@react-navigation/native";
-
 import {
   ButtonAlimentar,
   ButtonDormir,
@@ -37,6 +37,7 @@ export default function Details() {
   const { id } = route.params as { id: string };
 
   const tamagochiDatabase = useTamagochiDatabase();
+  const shakeAnimation = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     async function fetchTamagochi() {
@@ -59,15 +60,42 @@ export default function Details() {
     return IMAGES[imageKey] || IMAGES.eevee;
   };
 
+  const shakeImage = () => {
+    Animated.sequence([
+      Animated.timing(shakeAnimation, {
+        toValue: 10,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnimation, {
+        toValue: -10,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+      Animated.timing(shakeAnimation, {
+        toValue: 0,
+        duration: 100,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  };
+
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <ScrollView contentContainerStyle={styles.container}>
         {tamagochi ? (
           <View style={styles.detailsContainer}>
-            <Image
-              source={getImageSource(tamagochi.image)}
-              style={styles.image}
-            />
+            <TouchableOpacity onPress={shakeImage}>
+              <Animated.Image
+                source={getImageSource(tamagochi.image)}
+                style={[
+                  styles.image,
+                  {
+                    transform: [{ translateX: shakeAnimation }],
+                  },
+                ]}
+              />
+            </TouchableOpacity>
             <Text style={styles.name}>{tamagochi.name}</Text>
             <Text style={styles.stats}>Fome: {tamagochi.hunger}</Text>
             <Text style={styles.stats}>Sono: {tamagochi.sleep}</Text>
@@ -115,6 +143,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
     elevation: 5,
+    justifyContent: "space-between",
   },
   image: {
     width: 150,
@@ -130,6 +159,7 @@ const styles = StyleSheet.create({
   stats: {
     fontSize: 18,
     marginBottom: 5,
+    justifyContent: "space-between",
   },
   buttonContainer: {
     marginTop: 24,

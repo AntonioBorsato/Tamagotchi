@@ -9,6 +9,7 @@ import {
   StyleSheet,
   Text,
   ScrollView,
+  Animated,
 } from "react-native";
 import { router } from "expo-router";
 import { Input } from "@/components/input";
