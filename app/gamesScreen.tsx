@@ -1,22 +1,34 @@
 import React from "react";
 import { View, Text, Button, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import { ButtonVoltar } from "@/components/Button";
 
 export default function GamesScreen() {
   const router = useRouter();
 
   return (
-    <View style={styles.container}>
-      <View style={styles.gameContainer}>
-        <Text style={styles.gameTitle}>Jogo da Velha</Text>
-        <Button title="Iniciar" onPress={() => router.push("/jogoDaVelha")} color="#4CAF50" />
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <View style={styles.gameContainer}>
+          <Text style={styles.gameTitle}>Jogo da Velha</Text>
+          <Button
+            title="Iniciar"
+            onPress={() => router.push("/jogoDaVelha")}
+            color="#4CAF50"
+          />
+        </View>
+        <View style={styles.gameContainer}>
+          <Text style={styles.gameTitle}>Adivinhar Distancia</Text>
+          <Button
+            title="Iniciar"
+            onPress={() => router.push("/quizGame")}
+            color="#4CAF50"
+          />
+        </View>
+        <ButtonVoltar labelButton="Voltar" onpress={() => router.back()} />
       </View>
-      <View style={styles.gameContainer}>
-        <Text style={styles.gameTitle}>Adivinhar Distancia</Text>
-        <Button title="Iniciar" onPress={() => router.push("/quizGame")}  color="#4CAF50" />
-      </View>
-      <Button title="Voltar" onPress={() => router.back()} color="#FF4500" />
-    </View>
+    </GestureHandlerRootView>
   );
 }
 
@@ -46,4 +58,3 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
-
