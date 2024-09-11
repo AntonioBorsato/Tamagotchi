@@ -19,6 +19,7 @@ import {
   ButtonAlimentar,
   ButtonDormir,
   ButtonJogar,
+  ButtonVoltar,
 } from "@/components/Button";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
@@ -90,7 +91,7 @@ export default function Details() {
         ) : (
           <Text>Carregando...</Text>
         )}
-        <Button title="Voltar" onPress={() => router.back()} color="#FF4500" />
+        <ButtonVoltar labelButton="Voltar" onpress={() => router.back()} />
       </ScrollView>
     </GestureHandlerRootView>
   );
