@@ -23,6 +23,8 @@ import {
 } from "@/components/Button";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
+import CustomText from "@/components/CustomText";
+
 const IMAGES: Record<string, any> = {
   eevee: require("@/assets/images/eevee.png"),
   piplup: require("@/assets/images/piplup.png"),
@@ -85,6 +87,9 @@ export default function Details() {
       <ScrollView contentContainerStyle={styles.container}>
         {tamagochi ? (
           <View style={styles.detailsContainer}>
+            <CustomText bold size={26} style={styles.name}>
+              {tamagochi.name}
+            </CustomText>
             <TouchableOpacity onPress={shakeImage}>
               <Animated.Image
                 source={getImageSource(tamagochi.image)}
@@ -96,10 +101,18 @@ export default function Details() {
                 ]}
               />
             </TouchableOpacity>
-            <Text style={styles.name}>{tamagochi.name}</Text>
-            <Text style={styles.stats}>Fome: {tamagochi.hunger}</Text>
-            <Text style={styles.stats}>Sono: {tamagochi.sleep}</Text>
-            <Text style={styles.stats}>Diversão: {tamagochi.fun}</Text>
+
+            <View style={styles.row}>
+              <CustomText bold size={16} style={styles.textWithPadding}>
+                Fome: {tamagochi.hunger}
+              </CustomText>
+              <CustomText bold size={16} style={styles.textWithPadding}>
+                Sono: {tamagochi.sleep}
+              </CustomText>
+              <CustomText bold size={16} style={styles.textWithPadding}>
+                Diversão: {tamagochi.fun}
+              </CustomText>
+            </View>
 
             <View style={styles.buttonContainer}>
               <ButtonAlimentar
@@ -156,15 +169,18 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     marginBottom: 10,
   },
-  stats: {
-    fontSize: 18,
-    marginBottom: 5,
-    justifyContent: "space-between",
-  },
   buttonContainer: {
     marginTop: 24,
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-around", // Distribui espaço entre os itens
+    alignItems: "center", // Alinha verticalmente ao centro
+  },
+  textWithPadding: {
+    paddingHorizontal: 8, // Adiciona 10 de padding nas laterais dos textos
   },
 });
