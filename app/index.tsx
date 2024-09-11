@@ -29,6 +29,7 @@ const IMAGES: Record<string, any> = {
 };
 
 import { ButtonTama, ButtonAlimentar } from "@/components/Button";
+import SearchInput from "@/components/SearchInput";
 
 export default function Index() {
   const [id, setId] = useState<string | null>(null);
@@ -171,7 +172,6 @@ export default function Index() {
             onChangeText={setName}
             value={name}
           />
-
           <View style={styles.imageContainer}>
             {Object.keys(IMAGES).map((key, index) => (
               <TouchableOpacity
@@ -185,27 +185,23 @@ export default function Index() {
               </TouchableOpacity>
             ))}
           </View>
-
           <ButtonTama labelButton="Salvar" onpress={handleSave} />
-
-          <Input
-            placeholder="Pesquisar Tamagochis"
-            onChangeText={setSearch}
-            value={search}
-          />
+          <SearchInput search={search} setSearch={setSearch} />
         </View>
 
-        {tamagochis.map((item) => (
-          <Tamagochi
-            key={item.id}
-            data={item}
-            onPress={() => showDetails(item.id)}
-            onDelete={() => remove(item.id)}
-            onOpen={() =>
-              router.push({ pathname: "../details", params: { id: item.id } })
-            }
-          />
-        ))}
+        <View>
+          {tamagochis.map((item) => (
+            <Tamagochi
+              key={item.id}
+              data={item}
+              onPress={() => showDetails(item.id)}
+              onDelete={() => remove(item.id)}
+              onOpen={() =>
+                router.push({ pathname: "../details", params: { id: item.id } })
+              }
+            />
+          ))}
+        </View>
       </ScrollView>
     </GestureHandlerRootView>
   );
