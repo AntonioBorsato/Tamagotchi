@@ -177,10 +177,10 @@ const styles = StyleSheet.create({
   },
   row: {
     flexDirection: "row",
-    justifyContent: "space-around", // Distribui espaço entre os itens
-    alignItems: "center", // Alinha verticalmente ao centro
+    justifyContent: "space-around",
+    alignItems: "center", 
   },
   textWithPadding: {
-    paddingHorizontal: 8, // Adiciona 10 de padding nas laterais dos textos
+    paddingHorizontal: 8, 
   },
 });

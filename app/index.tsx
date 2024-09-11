@@ -28,7 +28,7 @@ const IMAGES: Record<string, any> = {
   jigglypuff: require("@/assets/images/jigglypuff.png"),
 };
 
-import { ButtonTama, ButtonAlimentar } from "@/components/Button";
+import { ButtonTama } from "@/components/Button";
 import SearchInput from "@/components/SearchInput";
 
 export default function Index() {
