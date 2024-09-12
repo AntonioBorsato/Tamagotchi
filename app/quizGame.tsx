@@ -3,11 +3,9 @@ import {
   View,
   Text,
   StyleSheet,
-  Button,
   TextInput,
   Alert,
   Keyboard,
-  KeyboardAvoidingView,
 } from "react-native";
 import * as Location from "expo-location";
 import { getDistance } from "geolib";
@@ -52,11 +50,7 @@ const countries = [
   { name: "Colômbia", latitude: 4.5709, longitude: -74.2973 },
   { name: "Comores", latitude: -11.6455, longitude: 43.3333 },
   { name: "Congo", latitude: -0.228, longitude: 15.827 },
-  {
-    name: "Congo (República Democrática)",
-    latitude: -4.0383,
-    longitude: 21.7587,
-  },
+  { name: "Congo (República Democrática)", latitude: -4.0383, longitude: 21.7587 },
   { name: "Costa do Marfim", latitude: 7.5399, longitude: -5.5471 },
   { name: "Costa Rica", latitude: 9.7489, longitude: -83.7534 },
   { name: "Croácia", latitude: 45.1, longitude: 15.2 },
@@ -298,20 +292,20 @@ const quizGame = () => {
                 </Text>
               )}
               <CustomButton
-                label="Gerar"
+                label="Gerar País"
                 onPress={generateQuestion}
                 backgroundColor="#ff5733"
-                textColor="#000"
+                textColor="white"
               />
             </View>
           </View>
         ) : (
           <View style={styles.container}>
             <CustomButton
-              label="Gerar"
+              label="Gerar País"
               onPress={generateQuestion}
               backgroundColor="#ff5733"
-              textColor="#000"
+              textColor="white"
             />
           </View>
         )}

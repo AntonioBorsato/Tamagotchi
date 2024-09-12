@@ -127,14 +127,6 @@ export default function Index() {
     } else {
       await create();
     }
-
-    setId(null);
-    setName("");
-    setHunger(70);
-    setSleep(70);
-    setFun(70);
-    setImage("eevee");
-    await list();
   }
 
   function statusTamagotchi(statusTamagotchi: number) {
