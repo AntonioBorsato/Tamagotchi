@@ -15,11 +15,11 @@ export type TamagochiProps = {
   onOpen: () => void;
 };
 
-const IMAGES = {
-  eevee: require("@/assets/images/eevee.png"),
-  piplup: require("@/assets/images/piplup.png"),
-  ponyta: require("@/assets/images/ponyta.png"),
-  jigglypuff: require("@/assets/images/jigglypuff.png"),
+const IMAGES: Record<string, any> = {
+  eevee: require("@/assets/images/azulmarrom.gif"),
+  piplup: require("@/assets/images/roxoazul.gif"),
+  ponyta: require("@/assets/images/roxobranco.gif"),
+  jigglypuff: require("@/assets/images/verdeazul.gif"),
 };
 
 export const Tamagochi: React.FC<TamagochiProps> = ({

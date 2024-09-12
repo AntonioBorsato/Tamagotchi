@@ -26,10 +26,10 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomText from "@/components/CustomText";
 
 const IMAGES: Record<string, any> = {
-  eevee: require("@/assets/images/eevee.png"),
-  piplup: require("@/assets/images/piplup.png"),
-  ponyta: require("@/assets/images/ponyta.png"),
-  jigglypuff: require("@/assets/images/jigglypuff.png"),
+  eevee: require("@/assets/images/azulmarrom.gif"),
+  piplup: require("@/assets/images/roxoazul.gif"),
+  ponyta: require("@/assets/images/roxobranco.gif"),
+  jigglypuff: require("@/assets/images/verdeazul.gif"),
 };
 
 export default function Details() {

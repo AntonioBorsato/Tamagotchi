@@ -22,10 +22,10 @@ import {
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 
 const IMAGES: Record<string, any> = {
-  eevee: require("@/assets/images/eevee.png"),
-  piplup: require("@/assets/images/piplup.png"),
-  ponyta: require("@/assets/images/ponyta.png"),
-  jigglypuff: require("@/assets/images/jigglypuff.png"),
+  eevee: require("@/assets/images/azulmarrom.gif"),
+  piplup: require("@/assets/images/roxoazul.gif"),
+  ponyta: require("@/assets/images/roxobranco.gif"),
+  jigglypuff: require("@/assets/images/verdeazul.gif"),
 };
 
 import { ButtonTama } from "@/components/Button";
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   image: {
-    width: 120,
+    width: 150,
     height: 100,
     borderRadius: 8,
     marginVertical: 10,
