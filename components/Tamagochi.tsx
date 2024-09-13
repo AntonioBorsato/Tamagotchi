@@ -29,7 +29,7 @@ export const Tamagochi: React.FC<TamagochiProps> = ({
   onOpen,
 }) => {
   const selectedImage = IMAGES[data.image as keyof typeof IMAGES];
-
+  
   return (
     <View style={styles.container}>
       <Image source={selectedImage || IMAGES.eevee} style={styles.image} />

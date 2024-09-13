@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import {
   View,
@@ -11,7 +11,7 @@ import {
   ScrollView,
   Animated,
 } from "react-native";
-import { router } from "expo-router";
+import { router, useFocusEffect } from "expo-router";
 import { Input } from "@/components/input";
 import { Tamagochi } from "@/components/Tamagochi";
 import {
@@ -52,7 +52,18 @@ export default function Index() {
         fun,
         image,
       });
-      Alert.alert("Tamagochi cadastrado");
+      Alert.alert(`Tamagochi cadastrado` + response.insertedRowId);
+      console.log('====================================');
+      console.log(response);
+      console.log('====================================');
+      // const response1 = tamagochiDatabase.update ({
+      //   id: 133,
+      //   name: "",
+      //   hunger: 50,
+      //   sleep: 300,
+      //   fun: 400,
+      //   image: ""
+      // });
       await list();
     } catch (error) {
       console.log("Erro ao criar Tamagochi:", error);
@@ -150,9 +161,37 @@ export default function Index() {
         return "Status Indefinido ";
     }
   }
+
+  async function updateAtributos() {
+    const allTamagochi = await tamagochiDatabase.getAllTamagochi();
+    allTamagochi.map(async (tamagochi) => {
+      
+      const result = await tamagochiDatabase.update({
+        id: tamagochi.id,
+        name: tamagochi.name,
+        hunger: tamagochi.hunger - 1,
+        sleep: tamagochi.sleep - 1,
+        fun: tamagochi.fun - 1,
+        image: tamagochi.image
+      });
+    })
+    setTamagochis(allTamagochi)
+  }
+
+  useEffect(()=>{
+    updateAtributos();
+  },[])
+
   useEffect(() => {
-    list();
-  }, [search]);
+
+    const intervalId = setInterval(() => {
+      updateAtributos();
+    }, 3000);
+
+    return () => {
+      clearInterval(intervalId)
+    };
+  }, [tamagochis]);
 
   return (
     <GestureHandlerRootView>

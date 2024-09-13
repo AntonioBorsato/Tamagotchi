@@ -41,6 +41,34 @@ export default function Details() {
   const tamagochiDatabase = useTamagochiDatabase();
   const shakeAnimation = useRef(new Animated.Value(0)).current;
 
+  async function updateAtributos(tamagochi: TamagochiDatabase) {
+
+    const result = await tamagochiDatabase.update({
+      id: tamagochi.id,
+      name: tamagochi.name,
+      hunger: tamagochi.hunger - 1,
+      sleep: tamagochi.sleep - 1,
+      fun: tamagochi.fun - 1,
+      image: tamagochi.image
+    });
+
+    const novoTamagochi = await tamagochiDatabase.show(tamagochi?.id!)
+    setTamagochi(novoTamagochi)
+  }
+
+  useEffect(() => {
+
+    const intervalId = setInterval(() => {
+      if (tamagochi) {
+        updateAtributos(tamagochi);
+      }
+    }, 3000);
+
+    return () => {
+      clearInterval(intervalId)
+    };
+  }, [tamagochi]);
+
   useEffect(() => {
     async function fetchTamagochi() {
       try {
@@ -178,9 +206,9 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
     justifyContent: "space-around",
-    alignItems: "center", 
+    alignItems: "center",
   },
   textWithPadding: {
-    paddingHorizontal: 8, 
+    paddingHorizontal: 8,
   },
 });
