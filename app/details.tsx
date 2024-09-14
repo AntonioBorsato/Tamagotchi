@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from "react";
 import {
   View,
   Text,
-  Image,
   StyleSheet,
   ScrollView,
   Alert,
@@ -22,7 +21,6 @@ import {
   ButtonVoltar,
 } from "@/components/Button";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-
 import CustomText from "@/components/CustomText";
 
 const IMAGES: Record<string, any> = {
@@ -46,17 +44,57 @@ export default function Details() {
     const newSleep = Math.max(tamagochi.sleep - 10, 0);
     const newFun = Math.max(tamagochi.fun - 10, 0);
 
-    const result = await tamagochiDatabase.update({
+    await tamagochiDatabase.update({
       id: tamagochi.id,
       name: tamagochi.name,
       hunger: newHunger,
       sleep: newSleep,
       fun: newFun,
-      image: tamagochi.image
+      image: tamagochi.image,
     });
 
     const novoTamagochi = await tamagochiDatabase.show(tamagochi.id);
     setTamagochi(novoTamagochi);
+  }
+
+  async function alimentarTamagochi() {
+    if (!tamagochi) return;
+
+    const newHunger = Math.min(tamagochi.hunger + 10, 100);
+
+    await tamagochiDatabase.update({
+      id: tamagochi.id,
+      name: tamagochi.name,
+      hunger: newHunger,
+      sleep: tamagochi.sleep,
+      fun: tamagochi.fun,
+      image: tamagochi.image,
+    });
+
+    const atualizadoTamagochi = await tamagochiDatabase.show(tamagochi.id);
+    setTamagochi(atualizadoTamagochi);
+  }
+
+  async function dormirTamagochi() {
+    if (!tamagochi) return;
+
+    Alert.alert("Dormir", "O Tamagochi está dormindo por 5 segundos...");
+    setTimeout(async () => {
+      const newSleep = Math.min(tamagochi.sleep + 10, 100);
+
+      await tamagochiDatabase.update({
+        id: tamagochi.id,
+        name: tamagochi.name,
+        hunger: tamagochi.hunger,
+        sleep: newSleep,
+        fun: tamagochi.fun,
+        image: tamagochi.image,
+      });
+
+      const atualizadoTamagochi = await tamagochiDatabase.show(tamagochi.id);
+      setTamagochi(atualizadoTamagochi);
+      Alert.alert("Dormir", "O Tamagochi acordou e ganhou 10 de sono!");
+    }, 5000);
   }
 
   useEffect(() => {
@@ -147,12 +185,9 @@ export default function Details() {
             <View style={styles.buttonContainer}>
               <ButtonAlimentar
                 labelButton="Alimentar"
-                onpress={() => alert("Bixin alimentado")}
+                onpress={alimentarTamagochi}
               />
-              <ButtonDormir
-                labelButton="Dormir"
-                onpress={() => alert("Zzz...")}
-              />
+              <ButtonDormir labelButton="Dormir" onpress={dormirTamagochi} />
               <ButtonJogar
                 labelButton="Jogar"
                 onpress={() => router.push("/gamesScreen")}

@@ -157,7 +157,7 @@ export default function Index() {
       const updatedHunger = Math.max(tamagochi.hunger - 10, 0);
       const updatedSleep = Math.max(tamagochi.sleep - 10, 0);
       const updatedFun = Math.max(tamagochi.fun - 10, 0);
-  
+
       await tamagochiDatabase.update({
         id: tamagochi.id,
         name: tamagochi.name,
@@ -171,9 +171,11 @@ export default function Index() {
   }
 
 
-  useEffect(()=>{
-    updateAtributos();
-  },[])
+  useFocusEffect(
+    useCallback(() => {
+    updateAtributos()    
+  }, [])
+  )
 
   useEffect(() => {
 
