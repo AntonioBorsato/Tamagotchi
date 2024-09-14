@@ -170,21 +170,19 @@ export default function Index() {
     setTamagochis(allTamagochi);
   }
 
-
   useFocusEffect(
     useCallback(() => {
-    updateAtributos()    
-  }, [])
-  )
+      updateAtributos();
+    }, [])
+  );
 
   useEffect(() => {
-
     const intervalId = setInterval(() => {
       updateAtributos();
     }, 30000);
 
     return () => {
-      clearInterval(intervalId)
+      clearInterval(intervalId);
     };
   }, [tamagochis]);
 

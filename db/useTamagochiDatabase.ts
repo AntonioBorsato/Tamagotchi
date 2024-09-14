@@ -39,7 +39,6 @@ export function useTamagochiDatabase() {
         data.fun,
         data.image,
       ]);
-
       return { insertedRowId: result.lastInsertRowId };
     } catch (error) {
       throw error;
@@ -58,14 +57,13 @@ export function useTamagochiDatabase() {
     }
   }
 
-  async function searchByName(name: string) {
+  async function searchByName(name: string): Promise<TamagochiDatabase[]> {
     try {
       const query = "SELECT * FROM tamagochis WHERE name LIKE ?";
       const response = await database.getAllAsync<TamagochiDatabase>(
         query,
         `%${name}%`
       );
-
       return response;
     } catch (error) {
       throw error;
@@ -76,7 +74,7 @@ export function useTamagochiDatabase() {
     const statement = await database.prepareAsync(`
       UPDATE tamagochis SET name = ?, hunger = ?, sleep = ?, fun = ?, image = ? WHERE id = ?
     `);
-  
+
     try {
       await statement.executeAsync([
         data.name,
@@ -85,12 +83,11 @@ export function useTamagochiDatabase() {
         data.fun,
         data.image,
         data.id,
-      ]); 
-      await statement.finalizeAsync();
+      ]);
     } catch (error) {
       throw error;
     } finally {
-      
+      await statement.finalizeAsync();
     }
   }
 
@@ -102,13 +99,12 @@ export function useTamagochiDatabase() {
     }
   }
 
-  async function show(id: number) {
+  async function show(id: number): Promise<TamagochiDatabase | null> {
     try {
       const query = "SELECT * FROM tamagochis WHERE id = ?";
       const response = await database.getFirstAsync<TamagochiDatabase>(query, [
         id,
       ]);
-
       return response;
     } catch (error) {
       throw error;

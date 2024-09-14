@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ButtonJogar, ButtonVoltar } from "@/components/Button";
@@ -12,21 +12,17 @@ export default function GamesScreen() {
       <View style={styles.container}>
         <View style={styles.gameContainer}>
           <Text style={styles.gameTitle}>Jogo da Velha</Text>
-          <View>
-            <ButtonJogar
-              labelButton="Iniciar"
-              onpress={() => router.push("/jogoDaVelha")}
-            />
-          </View>
+          <ButtonJogar
+            labelButton="Iniciar"
+            onpress={() => router.push("/jogoDaVelha")}
+          />
         </View>
         <View style={styles.gameContainer}>
-          <Text style={styles.gameTitle}>Adivinhar Distancia</Text>
-          <View>
-            <ButtonJogar
-              labelButton="Iniciar"
-              onpress={() => router.push("/quizGame")}
-            />
-          </View>
+          <Text style={styles.gameTitle}>Adivinhar Distância</Text>
+          <ButtonJogar
+            labelButton="Iniciar"
+            onpress={() => router.push("/quizGame")}
+          />
         </View>
         <ButtonVoltar labelButton="Voltar" onpress={() => router.back()} />
       </View>

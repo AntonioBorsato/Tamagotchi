@@ -1,14 +1,51 @@
-import React, { useState } from "react";
-import { View, Text, TouchableOpacity, Button, StyleSheet, Alert } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  Text,
+  Button,
+  StyleSheet,
+  Alert,
+  TouchableOpacity,
+} from "react-native";
+import { useRoute } from "@react-navigation/native";
+import {
+  TamagochiDatabase,
+  useTamagochiDatabase,
+} from "@/db/useTamagochiDatabase";
 
 const initialBoard = ["", "", "", "", "", "", "", "", ""];
 
-export default function TicTacToe() {
+const TicTacToe: React.FC = () => {
   const [board, setBoard] = useState<string[]>(initialBoard);
   const [isPlayerTurn, setIsPlayerTurn] = useState(true);
   const [difficulty, setDifficulty] = useState<"easy" | "medium" | "hard">(
     "easy"
   );
+  const [tamagochi, setTamagochi] = useState<TamagochiDatabase | null>(null);
+  const tamagochiDatabase = useTamagochiDatabase();
+  const route = useRoute();
+  const { id } = route.params as { id: number };
+
+  useEffect(() => {
+    const fetchTamagochi = async () => {
+      try {
+        if (id !== undefined && id !== null) {
+          console.log(`Buscando Tamagochi com ID: ´${id}`); // Verificação de id e interpolação com crases
+          const fetchedTamagochi = await tamagochiDatabase.show(id);
+          if (fetchedTamagochi) {
+            setTamagochi(fetchedTamagochi);
+          } else {
+            console.error("Tamagochi não encontrado para o ID fornecido.");
+          }
+        } else {
+          console.error("ID inválido ou indefinido.");
+        }
+      } catch (error) {
+        console.error("Erro ao buscar o Tamagochi:", error);
+      }
+    };
+    fetchTamagochi();
+  }, [id]);
 
   const checkWinner = (board: string[]): string | null => {
     const winningCombos = [
@@ -54,7 +91,6 @@ export default function TicTacToe() {
     }
 
     if (level === "medium" && Math.random() > 0.5) {
-      // Computador joga aleatório às vezes no nível "medium"
       return availableMoves[Math.floor(Math.random() * availableMoves.length)];
     }
 
@@ -89,12 +125,50 @@ export default function TicTacToe() {
     }
   };
 
-  const announceWinner = (winner: string) => {
+  const updateTamagochi = async (newFun: number) => {
+    if (tamagochi) {
+      try {
+        console.log(`Atualizando Tamagochi com ID: ${tamagochi.id}`); // Interpolação com crases
+        await tamagochiDatabase.update({
+          id: tamagochi.id,
+          name: tamagochi.name,
+          hunger: tamagochi.hunger,
+          sleep: tamagochi.sleep,
+          fun: newFun,
+          image: tamagochi.image,
+        });
+        console.log("Tamagochi atualizado com sucesso com diversão:", newFun);
+        setTamagochi({ ...tamagochi, fun: newFun });
+      } catch (error) {
+        console.error("Erro ao atualizar o Tamagochi:", error);
+      }
+    } else {
+      console.error("Tamagochi não encontrado para atualização.");
+    }
+  };
+
+  const announceWinner = async (winner: string) => {
+    console.log("Anunciando vencedor:", winner);
+
     if (winner === "draw") {
       Alert.alert("Empate!", "A partida terminou em empate.");
     } else {
-      Alert.alert("Fim de Jogo!", `${winner} venceu!`);
+      Alert.alert("Fim de Jogo!", `${winner} venceu!`); // Interpolação correta com crases
+      if (winner === "X") {
+        try {
+          if (tamagochi) {
+            const newFun = Math.min(tamagochi.fun + 10, 100);
+            console.log("Atualizando diversão para:", newFun);
+            await updateTamagochi(newFun);
+          } else {
+            console.error("Tamagochi não encontrado para o ID fornecido.");
+          }
+        } catch (error) {
+          console.error("Erro ao atualizar diversão:", error);
+        }
+      }
     }
+
     resetGame();
   };
 
@@ -106,7 +180,6 @@ export default function TicTacToe() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Jogo da Velha</Text>
-
       <View style={styles.difficultyContainer}>
         <Button
           title="Fácil"
@@ -124,7 +197,6 @@ export default function TicTacToe() {
           color={difficulty === "hard" ? "#4CAF50" : "#2196F3"}
         />
       </View>
-
       <View style={styles.board}>
         {board.map((square, index) => (
           <TouchableOpacity
@@ -136,11 +208,10 @@ export default function TicTacToe() {
           </TouchableOpacity>
         ))}
       </View>
-
       <Button title="Reiniciar" onPress={resetGame} color="#f44336" />
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -183,3 +254,5 @@ const styles = StyleSheet.create({
     color: "#333",
   },
 });
+
+export default TicTacToe;

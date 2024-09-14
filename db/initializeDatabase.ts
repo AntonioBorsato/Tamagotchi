@@ -1,4 +1,5 @@
 import { type SQLiteDatabase } from "expo-sqlite";
+import { useTamagochiDatabase } from "./useTamagochiDatabase";
 
 export async function initializeDatabase(database: SQLiteDatabase) {
   if (!database) {
