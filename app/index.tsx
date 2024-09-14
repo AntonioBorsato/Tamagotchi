@@ -53,17 +53,6 @@ export default function Index() {
         image,
       });
       Alert.alert(`Tamagochi cadastrado` + response.insertedRowId);
-      console.log('====================================');
-      console.log(response);
-      console.log('====================================');
-      // const response1 = tamagochiDatabase.update ({
-      //   id: 133,
-      //   name: "",
-      //   hunger: 50,
-      //   sleep: 300,
-      //   fun: 400,
-      //   image: ""
-      // });
       await list();
     } catch (error) {
       console.log("Erro ao criar Tamagochi:", error);
@@ -165,18 +154,22 @@ export default function Index() {
   async function updateAtributos() {
     const allTamagochi = await tamagochiDatabase.getAllTamagochi();
     allTamagochi.map(async (tamagochi) => {
-      
-      const result = await tamagochiDatabase.update({
+      const updatedHunger = Math.max(tamagochi.hunger - 10, 0);
+      const updatedSleep = Math.max(tamagochi.sleep - 10, 0);
+      const updatedFun = Math.max(tamagochi.fun - 10, 0);
+  
+      await tamagochiDatabase.update({
         id: tamagochi.id,
         name: tamagochi.name,
-        hunger: tamagochi.hunger - 1,
-        sleep: tamagochi.sleep - 1,
-        fun: tamagochi.fun - 1,
-        image: tamagochi.image
+        hunger: updatedHunger,
+        sleep: updatedSleep,
+        fun: updatedFun,
+        image: tamagochi.image,
       });
-    })
-    setTamagochis(allTamagochi)
+    });
+    setTamagochis(allTamagochi);
   }
+
 
   useEffect(()=>{
     updateAtributos();
@@ -186,7 +179,7 @@ export default function Index() {
 
     const intervalId = setInterval(() => {
       updateAtributos();
-    }, 3000);
+    }, 30000);
 
     return () => {
       clearInterval(intervalId)

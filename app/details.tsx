@@ -42,30 +42,32 @@ export default function Details() {
   const shakeAnimation = useRef(new Animated.Value(0)).current;
 
   async function updateAtributos(tamagochi: TamagochiDatabase) {
+    const newHunger = Math.max(tamagochi.hunger - 10, 0);
+    const newSleep = Math.max(tamagochi.sleep - 10, 0);
+    const newFun = Math.max(tamagochi.fun - 10, 0);
 
     const result = await tamagochiDatabase.update({
       id: tamagochi.id,
       name: tamagochi.name,
-      hunger: tamagochi.hunger - 1,
-      sleep: tamagochi.sleep - 1,
-      fun: tamagochi.fun - 1,
+      hunger: newHunger,
+      sleep: newSleep,
+      fun: newFun,
       image: tamagochi.image
     });
 
-    const novoTamagochi = await tamagochiDatabase.show(tamagochi?.id!)
-    setTamagochi(novoTamagochi)
+    const novoTamagochi = await tamagochiDatabase.show(tamagochi.id);
+    setTamagochi(novoTamagochi);
   }
 
   useEffect(() => {
-
     const intervalId = setInterval(() => {
       if (tamagochi) {
         updateAtributos(tamagochi);
       }
-    }, 3000);
+    }, 30000);
 
     return () => {
-      clearInterval(intervalId)
+      clearInterval(intervalId);
     };
   }, [tamagochi]);
 
