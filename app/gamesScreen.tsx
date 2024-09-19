@@ -1,34 +1,67 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { ButtonJogar, ButtonVoltar } from "@/components/Button";
+import { useTamagochiDatabase } from "@/db/useTamagochiDatabase";
 
-export default function GamesScreen() {
+interface Tamagochi {
+  id: number;
+}
+
+const GamesScreen: React.FC = () => {
+  const [tamagochiId, setTamagochiId] = useState<number | null>(null);
+  const tamagochiDatabase = useTamagochiDatabase();
   const router = useRouter();
 
+  const fetchTamagochi = useCallback(async () => {
+    try {
+      const tamagotchis: Tamagochi[] =
+        await tamagochiDatabase.getAllTamagochi();
+      if (tamagotchis.length > 0) {
+        setTamagochiId(tamagotchis[0].id);
+      } else {
+        // Handle empty array scenario
+        console.error("No tamagotchis found");
+      }
+    } catch (error) {
+      console.error("Error fetching tamagotchis:", error);
+    }
+  }, [tamagochiDatabase]);
+
+  useEffect(() => {
+    fetchTamagochi();
+  }, [fetchTamagochi]);
+
+  if (tamagochiId === null) {
+    return <Text>Carregando...</Text>;
+  }
+
   return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <View style={styles.container}>
-        <View style={styles.gameContainer}>
-          <Text style={styles.gameTitle}>Jogo da Velha</Text>
-          <ButtonJogar
-            labelButton="Iniciar"
-            onpress={() => router.push("/jogoDaVelha")}
-          />
-        </View>
-        <View style={styles.gameContainer}>
-          <Text style={styles.gameTitle}>Adivinhar Distância</Text>
-          <ButtonJogar
-            labelButton="Iniciar"
-            onpress={() => router.push("/quizGame")}
-          />
-        </View>
-        <ButtonVoltar labelButton="Voltar" onpress={() => router.back()} />
+    <GestureHandlerRootView style={styles.container}>
+      <View style={styles.gameContainer}>
+        <Text style={styles.gameTitle}>Jogo da Velha</Text>
+        <ButtonJogar
+          labelButton="Iniciar"
+          onpress={() =>
+            router.push({
+              pathname: "/jogoDaVelha",
+              params: { id: tamagochiId },
+            })
+          }
+        />
       </View>
+      <View style={styles.gameContainer}>
+        <Text style={styles.gameTitle}>Adivinhar Distância</Text>
+        <ButtonJogar
+          labelButton="Iniciar"
+          onpress={() => router.push("/quizGame")}
+        />
+      </View>
+      <ButtonVoltar labelButton="Voltar" onpress={() => router.back()} />
     </GestureHandlerRootView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -56,3 +89,5 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
 });
+
+export default GamesScreen;

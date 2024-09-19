@@ -30,7 +30,7 @@ const TicTacToe: React.FC = () => {
     const fetchTamagochi = async () => {
       try {
         if (id !== undefined && id !== null) {
-          console.log(`Buscando Tamagochi com ID: ´${id}`); // Verificação de id e interpolação com crases
+          console.log(`Buscando Tamagochi com ID: ${id}`); // Verificação de id e interpolação com crases
           const fetchedTamagochi = await tamagochiDatabase.show(id);
           if (fetchedTamagochi) {
             setTamagochi(fetchedTamagochi);
