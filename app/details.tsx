@@ -57,10 +57,37 @@ export default function Details() {
       : undefined;
   }, [sound]);
 
+  const calcularStatus = (
+    hunger: number,
+    sleep: number,
+    fun: number
+  ): string => {
+    const total = hunger + sleep + fun;
+
+    if (total === 0) return "morto";
+    if (total <= 50) return "crítico";
+    if (total <= 100) return "muito triste";
+    if (total <= 150) return "triste";
+    if (total <= 200) return "ok";
+    if (total <= 250) return "bem";
+    return "muito bem";
+  };
+
   async function updateAtributos(tamagochi: TamagochiDatabase) {
     const newHunger = Math.max(tamagochi.hunger - 10, 0);
     const newSleep = Math.max(tamagochi.sleep - 10, 0);
     const newFun = Math.max(tamagochi.fun - 10, 0);
+
+    await tamagochiDatabase.update({
+      id: tamagochi.id,
+      name: tamagochi.name,
+      hunger: newHunger,
+      sleep: newSleep,
+      fun: newFun,
+      image: tamagochi.image,
+    });
+
+    const status = calcularStatus(newHunger, newSleep, newFun);
 
     await tamagochiDatabase.update({
       id: tamagochi.id,
@@ -225,6 +252,11 @@ export default function Details() {
               </CustomText>
             </View>
 
+            <CustomText bold size={18} style={styles.statusText}>
+              Status:{" "}
+              {calcularStatus(tamagochi.hunger, tamagochi.sleep, tamagochi.fun)}
+            </CustomText>
+
             <View style={styles.buttonContainer}>
               <ButtonAlimentar
                 labelButton="Alimentar"
@@ -293,5 +325,11 @@ const styles = StyleSheet.create({
   },
   textWithPadding: {
     paddingHorizontal: 8,
+  },
+  statusText: {
+    marginTop: 10,
+    fontSize: 18,
+    fontWeight: "bold",
+    color: "#333",
   },
 });

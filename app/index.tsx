@@ -129,25 +129,26 @@ export default function Index() {
     }
   }
 
-  function statusTamagotchi(statusTamagotchi: number) {
-    switch (true) {
-      case statusTamagotchi < 1:
-        return "Morto!";
-      case statusTamagotchi < 51:
-        return "Critico!";
-      case statusTamagotchi < 101:
-        return "Muito triste...";
-      case statusTamagotchi < 151:
-        return "Triste";
-      case statusTamagotchi < 201:
-        return "OK";
-      case statusTamagotchi < 251:
-        return "Até que tá bem";
-      case statusTamagotchi < 301:
-        return "Muito Bem !!";
+  function statusTamagotchi(hunger: number, sleep: number, fun: number) {
+    const total = hunger + sleep + fun;
 
+    switch (true) {
+      case total < 1:
+        return "Morto!";
+      case total < 51:
+        return "Crítico!";
+      case total < 101:
+        return "Muito triste...";
+      case total < 151:
+        return "Triste";
+      case total < 201:
+        return "OK";
+      case total < 251:
+        return "Até que tá bem";
+      case total < 301:
+        return "Muito Bem!!";
       default:
-        return "Status Indefinido ";
+        return "Status Indefinido";
     }
   }
 
@@ -215,15 +216,23 @@ export default function Index() {
 
         <View>
           {tamagochis.map((item) => (
-            <Tamagochi
-              key={item.id}
-              data={item}
-              onPress={() => showDetails(item.id)}
-              onDelete={() => remove(item.id)}
-              onOpen={() =>
-                router.push({ pathname: "../details", params: { id: item.id } })
-              }
-            />
+            <View key={item.id} style={styles.tamagochiContainer}>
+              <Text style={styles.statusText}>
+                Status: {statusTamagotchi(item.hunger, item.sleep, item.fun)}
+              </Text>
+
+              <Tamagochi
+                data={item}
+                onPress={() => showDetails(item.id)}
+                onDelete={() => remove(item.id)}
+                onOpen={() =>
+                  router.push({
+                    pathname: "../details",
+                    params: { id: item.id },
+                  })
+                }
+              />
+            </View>
           ))}
         </View>
       </ScrollView>
@@ -272,5 +281,14 @@ const styles = StyleSheet.create({
   },
   selectedImage: {
     borderColor: "#007bff",
+  },
+  tamagochiContainer: {
+    marginBottom: 20,
+  },
+  statusText: {
+    fontSize: 16,
+    fontWeight: "bold",
+    textAlign: "center",
+    marginTop: 8,
   },
 });
