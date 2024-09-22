@@ -23,6 +23,8 @@ import {
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import CustomText from "@/components/CustomText";
 
+import { Audio } from "expo-av"; // Importação do expo-av
+
 const IMAGES: Record<string, any> = {
   eevee: require("@/assets/images/azulmarrom.gif"),
   piplup: require("@/assets/images/roxoazul.gif"),
@@ -35,9 +37,25 @@ export default function Details() {
   const router = useRouter();
   const route = useRoute();
   const { id } = route.params as { id: string };
-
   const tamagochiDatabase = useTamagochiDatabase();
   const shakeAnimation = useRef(new Animated.Value(0)).current;
+  const [sound, setSound] = useState<Audio.Sound | null>(null); // Estado para o som
+
+  async function loadSound() {
+    const { sound } = await Audio.Sound.createAsync(
+      require("./sound/dream-99404.mp3") // Arquivo de som
+    );
+    setSound(sound);
+  }
+
+  useEffect(() => {
+    loadSound();
+    return sound
+      ? () => {
+          sound.unloadAsync(); // Libera o som da memória
+        }
+      : undefined;
+  }, [sound]);
 
   async function updateAtributos(tamagochi: TamagochiDatabase) {
     const newHunger = Math.max(tamagochi.hunger - 10, 0);
@@ -95,6 +113,13 @@ export default function Details() {
 
   async function dormirTamagochi() {
     if (!tamagochi) return;
+
+    // Verifica se o som foi carregado antes de tocar
+    if (sound) {
+      await sound.playAsync();
+    } else {
+      console.log("Som não carregado."); // Log para depuração
+    }
 
     Alert.alert("Dormir", "O Tamagochi está dormindo por 5 segundos...");
     setTimeout(async () => {
