@@ -75,6 +75,24 @@ export default function Details() {
     setTamagochi(atualizadoTamagochi);
   }
 
+  async function diversaoTamagotchi() {
+    if (!tamagochi) return;
+
+    const newFun = Math.min(tamagochi.fun + 10, 100);
+
+    await tamagochiDatabase.update({
+      id: tamagochi.id,
+      name: tamagochi.name,
+      hunger: tamagochi.hunger,
+      sleep: tamagochi.sleep,
+      fun: newFun,
+      image: tamagochi.image,
+    });
+
+    const atualizadoTamagochi = await tamagochiDatabase.show(tamagochi.id);
+    setTamagochi(atualizadoTamagochi);
+  }
+
   async function dormirTamagochi() {
     if (!tamagochi) return;
 
@@ -190,7 +208,10 @@ export default function Details() {
               <ButtonDormir labelButton="Dormir" onpress={dormirTamagochi} />
               <ButtonJogar
                 labelButton="Jogar"
-                onpress={() => router.push("/gamesScreen")}
+                onpress={async () => {
+                  await diversaoTamagotchi(); // Executa a função de diversão do Tamagotchi
+                  router.push("/gamesScreen"); // Após a função, redireciona para a tela de jogos
+                }}
               />
             </View>
           </View>
